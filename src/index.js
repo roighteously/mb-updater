@@ -14,11 +14,11 @@ console.log('Please connect your micro:bit in [maintenance or normal] mode!')
 winDriveUtil.waitForDrive('MAINTENANCE').then((drive) => {
     console.log('Maintenance mode microbit found at', drive)
     console.log(fs.readFileSync(path.join(drive, 'DETAILS.TXT')).toString())
-    let fwp = path.join(drive, config.fw).toString();
+    let fwf = config.fw.split('files/')[1];
+    let fwp = path.join(drive, fwf).toString();
     console.log('Copying', fwFile, 'to', fwp)
     fs.cpSync(fwFile, fwp)
     console.log('Copied firmware')
-    copyStuff();
     setTimeout(() => {
         winDriveUtil.waitForDrive('MAINTENANCE').then((dr) => {
             console.log("Maintenance drive is back.. potential fail, so recopying")
@@ -43,7 +43,8 @@ function copyStuff() {
         console.log(dtlList[7])
         setTimeout(() => {
             console.log('Copying project')
-            let prp = path.join(dr, config.proj).toString();
+            let proj = config.proj.split('files/')[1];
+            let prp = path.join(dr, proj).toString();
             console.log(projFile, 'to', prp)
             fs.cpSync(projFile, prp)
             winDriveUtil.waitForDrive('MICROBIT').then((dr) => {
